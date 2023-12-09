@@ -22,7 +22,7 @@ For example:
     2023-10-06 02:00:00     2023-10-07 01:59:59             pass    pass            pass    pass
     2023-10-29 02:00:00     2023-10-30 00:59:59             pass    pass            pass    pass
     2023-11-13 01:00:00     2023-11-14 00:59:59             pass    pass            pass    pass
-    2023-12-04 01:00:00     2023-12-05 00:59:59             $${\color{red}FAIL}$$    pass            $${\color{red}FAIL}$$    pass
+    2023-12-04 01:00:00     2023-12-05 00:59:59             FAIL    pass            FAIL    pass
     2023-12-07 01:00:00     2023-12-08 00:59:59             pass    pass            pass    pass
 
     Reporter: Outlook.com
