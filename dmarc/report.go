@@ -69,6 +69,18 @@ func MergeAdjacentFeedbacks(feedbacks []Feedback) []Feedback {
 	return merged
 }
 
+func FilterFeedbacks(feedbacks []Feedback, filter func(Feedback) bool) []Feedback {
+	filtered := make([]Feedback, 0, len(feedbacks))
+
+	for _, feedback := range feedbacks {
+		if filter(feedback) {
+			filtered = append(filtered, feedback)
+		}
+	}
+
+	return filtered
+}
+
 func formatStatus(status string) string {
 	switch status {
 	case "pass":

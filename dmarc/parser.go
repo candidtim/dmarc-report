@@ -14,6 +14,11 @@ type Feedback struct {
 	Record          Record          `xml:"record"`
 }
 
+func (f Feedback) HasFailures() bool {
+	return f.Record.Row.PolicyEvaluated.DKIM == "fail" ||
+		f.Record.Row.PolicyEvaluated.SPF == "fail"
+}
+
 type ReportMetadata struct {
 	OrgName   string    `xml:"org_name"`
 	ReportID  string    `xml:"report_id"`

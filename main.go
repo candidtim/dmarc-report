@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -28,14 +29,30 @@ func listDir(directoryPath, pattern string) ([]string, error) {
 	return filePaths, nil
 }
 
+var printUsage = func() {
+	fmt.Printf("Usage: %s [OPTIONS] DIRECTORY DOMAIN\n\n", os.Args[0])
+	fmt.Println("Options:")
+	flag.PrintDefaults()
+}
+
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("Please provide both a directory path and a domain name as arguments.")
+	var failuresOnly bool
+	var colorOutput bool
+
+	flag.Usage = printUsage
+	flag.BoolVar(&failuresOnly, "f", false, "Show only the failures")
+	flag.BoolVar(&colorOutput, "c", true, "Show color output")
+
+	flag.Parse()
+	args := flag.Args()
+
+	if len(args) != 2 {
+		printUsage()
 		return
 	}
 
-	directoryPath := os.Args[1]
-	domainName := os.Args[2]
+	directoryPath := args[0]
+	domainName := args[1]
 	globPattern := fmt.Sprintf("*!%s!*", domainName)
 
 	fileList, err := listDir(directoryPath, globPattern)
@@ -54,19 +71,32 @@ func main() {
 		}
 	}
 
-	fmt.Println("# DKIM report for domain:", domainName)
+	fmt.Println("DMARC report for domain:", domainName)
 
 	feedbacks = dmarc.DeduplicateFeedbacks(feedbacks)
 	dmarc.OrderByBeginTime(feedbacks)
 	grouped := dmarc.GroupByOrgName(feedbacks)
+
 	for orgName, feedbacks := range grouped {
-		fmt.Println()
-		fmt.Println("## Reporter:", orgName)
-		fmt.Println()
+		fmt.Println("\nReporter:", orgName)
+
+		if failuresOnly {
+			feedbacks = dmarc.FilterFeedbacks(feedbacks, dmarc.Feedback.HasFailures)
+		}
+
+		if len(feedbacks) == 0 {
+			fmt.Println("pass")
+			continue
+		}
+
 		fmt.Println(dmarc.FormatHeader())
 		merged := dmarc.MergeAdjacentFeedbacks(feedbacks)
 		for _, feedback := range merged {
-			fmt.Println(dmarc.FormatFeedback(feedback))
+			if failuresOnly && !feedback.HasFailures() {
+				continue
+			} else {
+				fmt.Println(dmarc.FormatFeedback(feedback))
+			}
 		}
 	}
 }
