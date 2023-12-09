@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-  "github.com/candidtim/dmarc-report/dmarc"
+	"github.com/candidtim/dmarc-report/dmarc"
 )
 
 func listDir(directoryPath, pattern string) ([]string, error) {

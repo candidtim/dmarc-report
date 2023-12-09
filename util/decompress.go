@@ -24,7 +24,7 @@ func DecompressOpen(filePath string) (*os.File, error) {
 		return file, nil
 	}
 
-  return nil, fmt.Errorf("Won't parse '%s'. It is neither of: .xml, .xml.gz, .zip", filePath)
+	return nil, fmt.Errorf("Won't parse '%s'. It is neither of: .xml, .xml.gz, .zip", filePath)
 }
 
 func unzipGzip(gzipFile *os.File) (*os.File, error) {

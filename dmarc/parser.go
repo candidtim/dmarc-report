@@ -2,6 +2,7 @@ package dmarc
 
 import (
 	"encoding/xml"
+	"io"
 	"time"
 
 	"github.com/candidtim/dmarc-report/util"
@@ -80,15 +81,19 @@ func (d *DateRange) UnmarshalXML(dcr *xml.Decoder, start xml.StartElement) error
 }
 
 func ParseDMARCReport(filePath string) (Feedback, error) {
-	var feedback Feedback
 	file, err := util.DecompressOpen(filePath)
 	if err != nil {
-		return feedback, err
+		return Feedback{}, err
 	}
-	defer file.Close()
 
-	decoder := xml.NewDecoder(file)
-	err = decoder.Decode(&feedback)
+	defer file.Close()
+	return parseDMARCReportFile(file)
+}
+
+func parseDMARCReportFile(reader io.Reader) (Feedback, error) {
+	var feedback Feedback
+	decoder := xml.NewDecoder(reader)
+	err := decoder.Decode(&feedback)
 	if err != nil {
 		return feedback, err
 	}
