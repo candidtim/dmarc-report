@@ -14,10 +14,9 @@ For example:
 
     $ dmarc-report ~/Downloads example.com
 
-    # DKIM report for domain: example.com
+    DKIM report for domain: example.com
 
-    ## Reporter: google.com
-
+    Reporter: google.com
     Begin                   End                     Policy: DKIM    SPF     Auth:   DKIM    SPF
     2023-09-22 02:00:00     2023-09-24 01:59:59             pass    pass            pass    pass
     2023-10-06 02:00:00     2023-10-07 01:59:59             pass    pass            pass    pass
@@ -26,8 +25,7 @@ For example:
     2023-12-04 01:00:00     2023-12-05 00:59:59             FAIL    pass            FAIL    pass
     2023-12-07 01:00:00     2023-12-08 00:59:59             pass    pass            pass    pass
 
-    ## Reporter: Outlook.com
-
+    Reporter: Outlook.com
     Begin                   End                     Policy: DKIM    SPF     Auth:   DKIM    SPF
     2023-09-28 02:00:00     2023-09-29 02:00:00             pass    pass            pass    pass
     2023-10-03 02:00:00     2023-10-04 02:00:00             pass    pass            pass    pass
@@ -37,13 +35,17 @@ For example:
 
 ## Installation
 
-    go install github.com/candidtim/dmarc-report@1.0.0
+    go install github.com/candidtim/dmarc-report@1.1.0
 
 ## Usage
 
-Usage:
+Usage (show with `dmarc-report -h`):
 
-    dmarc-report DIRECTORY DOMAIN
+    dmarc-report [OPTIONS] DIRECTORY DOMAIN
+
+    Options:
+      -c    Show color output (default true)
+      -f    Show only the failures
 
 Example:
 
@@ -65,7 +67,6 @@ summary.
    the same as the end time of a previous one)
  - Tested on most popular DMARC reports (Google, Outlook). Not extensively
    tested in various complex scenarios.
-
 
 Note that this tool is originally implemented for individuals who own their domains,
 set up DMARC, and want to review the reports regularly. Some more complex
