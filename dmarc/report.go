@@ -3,7 +3,6 @@ package dmarc
 import (
 	"fmt"
 	"sort"
-	"strings"
 	"time"
 )
 
@@ -81,26 +80,34 @@ func FilterFeedbacks(feedbacks []Feedback, filter func(Feedback) bool) []Feedbac
 	return filtered
 }
 
-func formatStatus(status string) string {
+func formatStatus(status string, color bool) string {
+	if status == "fail" {
+		status = "FAIL"
+	}
+
+	if !color {
+		return status
+	}
+
 	switch status {
 	case "pass":
-		return fmt.Sprintf("\x1b[32m%s\x1b[0m", status) // fg green
-	case "fail":
-		return fmt.Sprintf("\x1b[31m%s\x1b[0m", strings.ToUpper(status)) // fg red
+		return fmt.Sprintf("\x1b[32m%s\x1b[0m", status)
+	case "FAIL":
+		return fmt.Sprintf("\x1b[31m%s\x1b[0m", status)
 	default:
 		return status
 	}
 }
 
-func FormatFeedback(feedback Feedback) string {
+func FormatFeedback(feedback Feedback, color bool) string {
 	return fmt.Sprintf(
 		"%s\t%s\t\t%s\t%s\t\t%s\t%s",
 		feedback.ReportMetadata.DateRange.Begin.Format(time.DateTime),
 		feedback.ReportMetadata.DateRange.End.Format(time.DateTime),
-		formatStatus(feedback.Record.Row.PolicyEvaluated.DKIM),
-		formatStatus(feedback.Record.Row.PolicyEvaluated.SPF),
-		formatStatus(feedback.Record.AuthResults.DKIM.Result),
-		formatStatus(feedback.Record.AuthResults.SPF.Result),
+		formatStatus(feedback.Record.Row.PolicyEvaluated.DKIM, color),
+		formatStatus(feedback.Record.Row.PolicyEvaluated.SPF, color),
+		formatStatus(feedback.Record.AuthResults.DKIM.Result, color),
+		formatStatus(feedback.Record.AuthResults.SPF.Result, color),
 	)
 }
 

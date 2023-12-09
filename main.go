@@ -95,7 +95,7 @@ func main() {
 			if failuresOnly && !feedback.HasFailures() {
 				continue
 			} else {
-				fmt.Println(dmarc.FormatFeedback(feedback))
+				fmt.Println(dmarc.FormatFeedback(feedback, colorOutput))
 			}
 		}
 	}
