@@ -80,7 +80,7 @@ func FilterFeedbacks(feedbacks []Feedback, filter func(Feedback) bool) []Feedbac
 	return filtered
 }
 
-func formatStatus(status string, color bool) string {
+func FormatStatus(status string, color bool) string {
 	if status == "fail" {
 		status = "FAIL"
 	}
@@ -104,10 +104,10 @@ func FormatFeedback(feedback Feedback, color bool) string {
 		"%s\t%s\t\t%s\t%s\t\t%s\t%s",
 		feedback.ReportMetadata.DateRange.Begin.Format(time.DateTime),
 		feedback.ReportMetadata.DateRange.End.Format(time.DateTime),
-		formatStatus(feedback.Record.Row.PolicyEvaluated.DKIM, color),
-		formatStatus(feedback.Record.Row.PolicyEvaluated.SPF, color),
-		formatStatus(feedback.Record.AuthResults.DKIM.Result, color),
-		formatStatus(feedback.Record.AuthResults.SPF.Result, color),
+		FormatStatus(feedback.Record.Row.PolicyEvaluated.DKIM, color),
+		FormatStatus(feedback.Record.Row.PolicyEvaluated.SPF, color),
+		FormatStatus(feedback.Record.AuthResults.DKIM.Result, color),
+		FormatStatus(feedback.Record.AuthResults.SPF.Result, color),
 	)
 }
 

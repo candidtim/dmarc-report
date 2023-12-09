@@ -85,7 +85,7 @@ func main() {
 		}
 
 		if len(feedbacks) == 0 {
-			fmt.Println("pass")
+			fmt.Println(dmarc.FormatStatus("pass", colorOutput))
 			continue
 		}
 
