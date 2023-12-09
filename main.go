@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+  "github.com/candidtim/dmarc-report/dmarc"
 )
 
 func listDir(directoryPath, pattern string) ([]string, error) {
@@ -42,9 +44,9 @@ func main() {
 		return
 	}
 
-	var feedbacks []Feedback
+	var feedbacks []dmarc.Feedback
 	for _, filePath := range fileList {
-		feedback, err := ParseDKIMReport(filePath)
+		feedback, err := dmarc.ParseDMARCReport(filePath)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Error parsing file:", err)
 		} else {
@@ -52,19 +54,19 @@ func main() {
 		}
 	}
 
-  fmt.Println("# DKIM report for domain:", domainName)
+	fmt.Println("# DKIM report for domain:", domainName)
 
-  feedbacks = DeduplicateFeedbacks(feedbacks)
-  OrderByBeginTime(feedbacks)
-  grouped := GroupByOrgName(feedbacks)
-  for orgName, feedbacks := range grouped {
-    fmt.Println()
-    fmt.Println("## Reporter:", orgName)
-    fmt.Println()
-    fmt.Println(FormatHeader())
-    merged := MergeAdjacentFeedbacks(feedbacks)
-    for _, feedback := range merged {
-      fmt.Println(FormatFeedback(feedback))
-    }
-  }
+	feedbacks = dmarc.DeduplicateFeedbacks(feedbacks)
+	dmarc.OrderByBeginTime(feedbacks)
+	grouped := dmarc.GroupByOrgName(feedbacks)
+	for orgName, feedbacks := range grouped {
+		fmt.Println()
+		fmt.Println("## Reporter:", orgName)
+		fmt.Println()
+		fmt.Println(dmarc.FormatHeader())
+		merged := dmarc.MergeAdjacentFeedbacks(feedbacks)
+		for _, feedback := range merged {
+			fmt.Println(dmarc.FormatFeedback(feedback))
+		}
+	}
 }

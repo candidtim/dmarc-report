@@ -1,8 +1,10 @@
-package main
+package dmarc
 
 import (
 	"encoding/xml"
 	"time"
+
+	"github.com/candidtim/dmarc-report/util"
 )
 
 type Feedback struct {
@@ -77,9 +79,9 @@ func (d *DateRange) UnmarshalXML(dcr *xml.Decoder, start xml.StartElement) error
 	return nil
 }
 
-func ParseDKIMReport(filePath string) (Feedback, error) {
+func ParseDMARCReport(filePath string) (Feedback, error) {
 	var feedback Feedback
-	file, err := DecompressOpen(filePath)
+	file, err := util.DecompressOpen(filePath)
 	if err != nil {
 		return feedback, err
 	}
