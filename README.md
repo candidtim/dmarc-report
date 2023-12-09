@@ -37,7 +37,7 @@ For example:
 
 ## Installation
 
-    go get github.com/candidtim/dmarc-report
+    go install github.com/candidtim/dmarc-report@latest
 
 ## Usage
 
